@@ -1,5 +1,5 @@
 /*
-Ex.3: Create linked list library with functions (ListAdd(), ListIs(), ListRemove()). New elements in list should be dynamically allocated.
+Ex.3: Create linked list library with functions (ListAdd(), ListPrint(), ListRemove()). New elements in list should be dynamically allocated.
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,9 +11,11 @@ typedef struct node{
 } linkedListNode;
 
 void ListAdd(linkedListNode* ptrHead, int16_t data);
-void ListIs(linkedListNode* ptrHead);
+void ListPrint(linkedListNode* ptrHead);
 uint8_t ListRemove(linkedListNode* ptrHead);
 linkedListNode* getLastNode(linkedListNode *ptrHead);
+int16_t ListIs(linkedListNode* head, int16_t findValue);
+
 
 
 
@@ -25,10 +27,11 @@ int main()
     char action = 0;
     int16_t dataBuf;
     uint8_t isGameOver = 0;
+    int16_t foundValueIndex = -1;
     while(1)
     {
-        ListIs(head);
-        printf("Type your action:\n(A - add element, R - remove last element)\n");
+        ListPrint(head);
+        printf("Type your action:\n(A - add element, R - remove last element, F - find element index for value)\n");
         scanf("%c", &action);
         if (action == 'A')
         {
@@ -36,6 +39,20 @@ int main()
             scanf("%d", &dataBuf);
             ListAdd(head, dataBuf);
             printf("value has been successfully stored.\n");
+        }
+        if (action == 'F')
+        {
+             printf("Type value to find:\t");
+             scanf("%d", &dataBuf);
+             foundValueIndex = ListIs(head, dataBuf);
+             if (foundValueIndex == -1)
+             {
+                 printf("Value is not in the list.\n");
+             }
+             else
+             {
+                 printf("Index of entered value is %d\n", foundValueIndex);
+             }
         }
         if (action == 'R')
         {
@@ -53,6 +70,7 @@ int main()
         {
             ;//do nothing
         }
+        action = 0;
         printf("================================================\n");
     }
     
@@ -70,7 +88,7 @@ void ListAdd(linkedListNode* ptrHead, int16_t data)
     
 }
 
-void ListIs(linkedListNode* ptrHead)
+void ListPrint(linkedListNode* ptrHead)
 {
     linkedListNode* cursor = ptrHead;
     uint16_t index = 0;
@@ -118,6 +136,25 @@ linkedListNode* getLastNode(linkedListNode* ptrHead)
         cursor = cursor->next;
     }
     return cursor;
+}
+
+int16_t ListIs(linkedListNode* head, int16_t findValue)
+{
+    linkedListNode* cursor = head;
+    int16_t index = 0;
+    while (cursor!= NULL)
+    {
+        if (cursor->data == findValue)
+        {
+            return index;
+        }
+        else 
+        {
+            cursor=cursor->next;
+            index++;
+        }
+    }
+    return -1;//not found
 }
 
 
